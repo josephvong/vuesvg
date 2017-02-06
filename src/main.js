@@ -3,9 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 
+import router from './router.js'
+
 /* eslint-disable no-new */
-new Vue({ 
+new Vue({
+	router:router,
   render:h=>h(App,{}),
-  //template: '<App/>',
-  //components: { App }
+  mounted(){
+  	router.push({"path":"/circle"})
+  }
 }).$mount("#app")
