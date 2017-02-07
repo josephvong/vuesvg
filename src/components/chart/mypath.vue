@@ -1,24 +1,27 @@
 <template>
-  <path class="cuspath" v-bind:d="prosD" v-bind:fill="color" ></path>
+ <!--  <path class="mypath" v-bind:d="prosD" v-bind:fill="enddata.color" ></path> -->
+ <text x="50" y="30" font-size="20" text-anchor="start">{{startdata}}}</text>
 </template>
 
 <script>
 
 export default {
-  name: 'cuspath',
+  name: 'mypath',
   props:{
-    startdata:{
+    /*startdata:{
       type:Object,
       default(){
-        return{X:0,Y:0,x:0,y:0}
+        return{X:0,Y:0,x:0,y:0,color:""}
       }
     },
     enddata:{
       type:Object,
       default(){
-        return{X:0,Y:0,x:0,y:0}
+        return{X:0,Y:0,x:0,y:0,color:""}
       }
-    },
+    },*/
+    startdata:null,
+    enddata:null,
     R:{
       type:Number,
       default:0
@@ -27,10 +30,6 @@ export default {
       type:Number,
       default:0
     },
-    color:{
-      type:String,
-      default:""
-    }
   },
   computed:{
     prosD(){
