@@ -1,11 +1,11 @@
 <template>
   <g>
-    <text x="0" y="30" font-size="20" text-anchor="start">{{pointlist[0]}}</text>
-    <text x="30" y="60" font-size="20" text-anchor="start">{{dlist.length}}</text>
+    <text x="0" y="30" font-size="20" text-anchor="start">{{pointlist.length}}</text>
+    <!-- <text x="30" y="60" font-size="20" text-anchor="start">{{dlist.length}}</text>
 
-    <!-- <path v-for="(item,index) in pointlist" d=`M${item.X,list[0].Y Aradius,radius,0,0,1,list[1].X,list[1].Y Llist[1].x,list[1].y Aradius*0.6,radius*0.6,0,0,0,list[0].x,list[0].y" fill="red"></path> -->
+
      <circle v-for="(item,index) in dlist"
-      v-bind:cx="item.X" v-bind:cy="item.Y" r="5" style="fill:transparent;stroke:red;stroke-width:1"></circle>
+      v-bind:cx="item.X" v-bind:cy="item.Y" r="5" style="fill:transparent;stroke:red;stroke-width:1"></circle> -->
 
   </g>
 </template>

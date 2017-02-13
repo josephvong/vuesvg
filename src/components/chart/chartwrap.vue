@@ -1,18 +1,16 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" class="chartwrap">
-    <g>
-      <text x="100" y="100" font-size="20" text-anchor="start">{{pathlist.length}}</text>
-
-      <!-- <group v-bind:pointlist="pathlist" v-bind:radius="radius" /> -->
-
+  <svg xmlns="http://www.w3.org/2000/svg" class="chartwrap" ref="field">
+    <g >
+      <text x="100" y="100" font-size="20" text-anchor="start">{{outerpoint[1]}}</text>
+      <!-- <group v-bind:pointlist="outerpoint"/> -->
     </g>
   </svg>
 </template>
 
 <script>
 import TWEEN from "tween.js"
-import part from "./part.vue"
-import mypath from "./mypath.vue"
+//import part from "./part.vue"
+//import mypath from "./mypath.vue"
 import group from "./group.vue"
 export default {
   name: 'chartwrap',
@@ -32,6 +30,8 @@ export default {
         {precent:12,text:"阿里",color:"black"},
         {precent:14,text:"豆瓣",color:"gray"}
       ],
+      //outerpoint:[{x:center.x+this.radius,y:center.y}],
+      //innerpoint:[{x:center.x+this.radius*0.6,y:center.y}]
       pathlist:[]
     }
   },
@@ -41,6 +41,14 @@ export default {
       cent.x=this.width/2;
       cent.y=this.height/2;
       return cent
+    },
+    outerpoint(){
+
+      return {x:this.center.x+this.radius,y:this.center.y}
+    },
+    innerpoint(){
+
+      return {x:this.center.x+this.radius*0.6,y:this.center.y}
     },
     singleangle(){  // 单个角度
       let arr=[];
@@ -83,39 +91,79 @@ export default {
 
   },
   watch:{
-    ang:function(newValue,oldValue){
-      let i=0;
-      let vm=this
+
+  },
+  methods:{
+    pathcreate(a,b,c,d,color){
+      let R=this.radius;
+      let oPath=document.createElementNS('http://www.w3.org/2000/svg' , "path");
+      oPath.setAttribute('d',`M${a.x},${a.y} A${R},${R},0,0,1,${b.x},${b.y} L${c.x},${c.y} A${R*0.6},${R*0.6},0,0,0,${d.x},${d.y}`) ;
+      oPath.setAttribute('fill',color);
+      return oPath;
+    },
+     pathnew(a,b,c,d,color){
+      let R=this.radius;
+      let oPath=document.createElementNS('http://www.w3.org/2000/svg' , "path");
+      oPath.setAttribute('d',`M${a.x},${a.y} A${R},${R},0,0,1,${b.x},${b.y} L${c.x},${c.y} A${R*0.6},${R*0.6},0,0,0,${d.x},${d.y}`) ;
+      oPath.setAttribute('fill',color);
+      return oPath;
+    },
+    textcreate(){
+
+      let oText=document.createElementNS('http://www.w3.org/2000/svg' , "text");
+      oText.innerHTML="AAAA";
+      oText.setAttribute("x",50);
+      oText.setAttribute("y",50);
+      oText.setAttribute("font-size",20);
+      return oText
+    },
+    init(){
+      let vm=this;
+      let num=0;
+
       function animate(time){
         requestAnimationFrame(animate)
         TWEEN.update(time)
       }
-      new TWEEN.Tween({tweeningNumber:oldValue}).to({ tweeningNumber: newValue }, 1000).onUpdate(function(){
-          vm.moveang=this.tweeningNumber.toFixed(0);
-          let obj={X:0,Y:0,x:0,y:0,color:''}
-          obj.X= Math.round(vm.center.x +Math.cos(Math.PI*vm.moveang/180)*vm.radius);
-          obj.Y=Math.round(vm.center.y + Math.sin(Math.PI*vm.moveang/180)*vm.radius);
-          obj.x=Math.round(vm.center.x + Math.cos(Math.PI*vm.moveang/180)*vm.radius*0.6);
-          obj.y=Math.round(vm.center.y + Math.sin(Math.PI*vm.moveang/180)*vm.radius*0.6);
-          obj.color=vm.chartdata[i].color;
-          if(vm.moveang>=vm.chartangle[i].end){
-            i+=1;
-          }
+      new TWEEN.Tween({tweeningNumber:0}).to({ tweeningNumber: 360 },500).onUpdate(function(){
+          let Outer=[vm.outerpoint];
+          let Inner=[vm.innerpoint];
 
-          vm.pathlist.push(obj);
+          num=this.tweeningNumber.toFixed(0)/360;
+          for(let i=0; i<vm.chartangle.length;i++){
+            let out={x:0,y:0};  let inn={x:0,y:0};
+            out.x=Math.cos( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius + vm.center.x;
+            out.y=Math.sin( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius + vm.center.y;
+            Outer.push(out);
+
+            inn.x=Math.cos( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius*0.6 + vm.center.x;
+            inn.y=Math.sin( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius*0.6 + vm.center.y;
+            Inner.push(inn);
+          }
+          for(let i=0; i<Outer.length;i++){
+            if(i == Outer.length-1){
+              break;
+            }
+            let newPath=vm.pathnew(Outer[i],Outer[i+1],Inner[i+1],Inner[i],vm.chartdata[i].color)
+            vm.$refs.field.appendChild(newPath)
+          }
 
         }).easing(TWEEN.Easing.Linear.None).start()
       animate()
     }
   },
   components: {
-    part:part,
-    mypath:mypath,
     group:group
   },
   mounted(){
-    this.ang=360;
-    //console.log(this.pathlist[0])
+
+    //console.log(this.$refs.field);
+    //let oTxt=this.pathnew({x:520,y:200},{x:330,y:310},{x:360,y:280},{x:460,y:200},"red")
+    //this.$refs.field.appendChild(oTxt);
+    this.$nextTick(function(){
+      this.init();
+     // console.log(this.outerpoint);
+    })
   }
 }
 </script>
