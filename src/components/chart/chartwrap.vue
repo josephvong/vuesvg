@@ -1,8 +1,12 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" class="chartwrap" ref="field">
-    <g >
-      <text x="100" y="100" font-size="20" text-anchor="start">{{outerpoint[1]}}</text>
-      <!-- <group v-bind:pointlist="outerpoint"/> -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="chartwrap">
+    <g ref="field">
+    </g>
+    <g>
+        <text v-for="item in textpoint" text-anchor="middle" font-size="20"
+              v-bind:x="item.x-10"
+              v-bind:y="item.y"
+        >{{item.text}}</text>
     </g>
   </svg>
 </template>
@@ -10,8 +14,8 @@
 <script>
 import TWEEN from "tween.js"
 //import part from "./part.vue"
-//import mypath from "./mypath.vue"
-import group from "./group.vue"
+//import cuspath from "./cuspath.vue"
+
 export default {
   name: 'chartwrap',
   data(){
@@ -25,14 +29,14 @@ export default {
       chartdata:[
         {precent:18,text:"人人",color:"red"},
         {precent:17,text:"微博",color:"blue"},
-        {precent:16,text:"知乎",color:"yellow"},
+        {precent:8,text:"QQ",color:"pink"},
+        {precent:8,text:"知乎",color:"yellow"},
         {precent:23,text:"网易",color:"green"},
         {precent:12,text:"阿里",color:"black"},
         {precent:14,text:"豆瓣",color:"gray"}
       ],
-      //outerpoint:[{x:center.x+this.radius,y:center.y}],
-      //innerpoint:[{x:center.x+this.radius*0.6,y:center.y}]
-      pathlist:[]
+      // outArr:[],
+      // inArr:[]
     }
   },
   computed:{
@@ -42,14 +46,21 @@ export default {
       cent.y=this.height/2;
       return cent
     },
-    outerpoint(){
-
+    colorArr(){
+      let arr=[];
+      for(let i=0; i<this.chartdata.length;i++){
+        arr.push(  this.chartdata[i].color );
+      }
+      return arr;
+    },
+    outerpoint(){  //
       return {x:this.center.x+this.radius,y:this.center.y}
     },
-    innerpoint(){
 
+    innerpoint(){
       return {x:this.center.x+this.radius*0.6,y:this.center.y}
     },
+
     singleangle(){  // 单个角度
       let arr=[];
       for(let i=0; i<this.chartdata.length;i++){
@@ -90,18 +101,8 @@ export default {
     },
 
   },
-  watch:{
-
-  },
   methods:{
-    pathcreate(a,b,c,d,color){
-      let R=this.radius;
-      let oPath=document.createElementNS('http://www.w3.org/2000/svg' , "path");
-      oPath.setAttribute('d',`M${a.x},${a.y} A${R},${R},0,0,1,${b.x},${b.y} L${c.x},${c.y} A${R*0.6},${R*0.6},0,0,0,${d.x},${d.y}`) ;
-      oPath.setAttribute('fill',color);
-      return oPath;
-    },
-     pathnew(a,b,c,d,color){
+     pathnew(a,b,c,d,color){  // 动态生成扇形路径图
       let R=this.radius;
       let oPath=document.createElementNS('http://www.w3.org/2000/svg' , "path");
       oPath.setAttribute('d',`M${a.x},${a.y} A${R},${R},0,0,1,${b.x},${b.y} L${c.x},${c.y} A${R*0.6},${R*0.6},0,0,0,${d.x},${d.y}`) ;
@@ -117,52 +118,46 @@ export default {
       oText.setAttribute("font-size",20);
       return oText
     },
-    init(){
+    chartInit(obj){
       let vm=this;
       let num=0;
-
+      console.log(obj)
       function animate(time){
         requestAnimationFrame(animate)
         TWEEN.update(time)
       }
-      new TWEEN.Tween({tweeningNumber:0}).to({ tweeningNumber: 360 },500).onUpdate(function(){
-          let Outer=[vm.outerpoint];
-          let Inner=[vm.innerpoint];
+      new TWEEN.Tween({tweeningNumber:0}).to({ tweeningNumber: 360 },300).onUpdate(function(){ // 运动每一步执行一次以下函数
+          let Outer=[vm.outerpoint];  // 外圆数组（每次定义新数组，均以水平半径0度作为开始）
+          let Inner=[vm.innerpoint];  // 内圆数组（同上）
 
-          num=this.tweeningNumber.toFixed(0)/360;
-          for(let i=0; i<vm.chartangle.length;i++){
+          num=this.tweeningNumber.toFixed(0)/360;  // 过渡过程
+          for(let i=0; i<vm.chartangle.length;i++){ // 轮询角度数组内的每个角度
             let out={x:0,y:0};  let inn={x:0,y:0};
             out.x=Math.cos( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius + vm.center.x;
             out.y=Math.sin( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius + vm.center.y;
-            Outer.push(out);
+            Outer.push(out);  // 每次计算后 将 对应角度 的当前运动进度的角度 生成的外点 放入 外圆数组
 
             inn.x=Math.cos( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius*0.6 + vm.center.x;
             inn.y=Math.sin( vm.chartangle[i].end * num * Math.PI/180 ) * vm.radius*0.6 + vm.center.y;
-            Inner.push(inn);
+            Inner.push(inn); // 内圆同上
           }
-          for(let i=0; i<Outer.length;i++){
+
+          for(let i=0; i<Outer.length;i++){ // 然后根据每个外圆/内圆 数组 来生成当前进度下每个角度的扇形
             if(i == Outer.length-1){
               break;
             }
-            let newPath=vm.pathnew(Outer[i],Outer[i+1],Inner[i+1],Inner[i],vm.chartdata[i].color)
-            vm.$refs.field.appendChild(newPath)
+            let newPath=vm.pathnew(Outer[i],Outer[i+1],Inner[i+1],Inner[i],vm.chartdata[i].color) // 生成扇形
+            //vm.$refs.field.appendChild(newPath)
+            obj.appendChild(newPath)
           }
 
         }).easing(TWEEN.Easing.Linear.None).start()
       animate()
     }
   },
-  components: {
-    group:group
-  },
   mounted(){
-
-    //console.log(this.$refs.field);
-    //let oTxt=this.pathnew({x:520,y:200},{x:330,y:310},{x:360,y:280},{x:460,y:200},"red")
-    //this.$refs.field.appendChild(oTxt);
     this.$nextTick(function(){
-      this.init();
-     // console.log(this.outerpoint);
+      this.chartInit(this.$refs.field);
     })
   }
 }

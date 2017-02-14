@@ -7,23 +7,31 @@
 export default {
   name: 'cuspath',
   props:{
-    startdata:{
+    startIn:{
       type:Object,
       default(){
-        return{X:0,Y:0,x:0,y:0}
+        return {x:0,y:0}
       }
     },
-    enddata:{
+    startOut:{
+      type:Object,
+       default(){
+        return {x:0,y:0}
+      }
+    },
+    endIn:{
+      type:Object,
+       default(){
+        return {x:0,y:0}
+      }
+    },
+    endOut:{
       type:Object,
       default(){
-        return{X:0,Y:0,x:0,y:0}
+        return {x:0,y:0}
       }
     },
     R:{
-      type:Number,
-      default:0
-    },
-    r:{
       type:Number,
       default:0
     },
@@ -34,11 +42,13 @@ export default {
   },
   computed:{
     prosD(){
-      let S=this.startdata;
-      let E=this.enddata;
+      let si=this.startIn;
+      let so=this.startOut;
+      let ei=this.endIn;
+      let eo=this.endOut;
       let R=this.R;
       let r=this.r;
-      let str=`M${S.X},${S.Y} A${R},${R},0,0,1,${E.X},${E.Y} L${E.x},${E.y} A${r},${r},0,0,0,${S.x},${S.y}`;
+      let str=`M${so.x},${so.y} A${R},${R},0,0,1,${eo.x},${eo.y} L${ei.x},${ei.y} A${R*0.6},${R*0.6},0,0,0,${si.x},${si.y}`;
       return str
     }
   },
