@@ -66,7 +66,7 @@ export default {
         line-height:50px
         font-size:20px
         text-align:center
-  .wrap
+  &>.wrap
     width:740px
     height:400px
     border:1px solid red
