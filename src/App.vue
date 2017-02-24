@@ -6,10 +6,13 @@
         <router-link class="link" to="/circle">circle</router-link>
       </li>
       <li v-on:click="selectData('path')">
-        <router-link class="link" to="/path" v-on:click="selectData">path</router-link>
+        <router-link class="link" to="/path" >path</router-link>
       </li>
       <li v-on:click="selectData('chart')">
-        <router-link class="link" to="/chart" v-on:click="selectData">chart</router-link>
+        <router-link class="link" to="/chart" >chart</router-link>
+      </li>
+      <li v-on:click="selectData('routertest')">
+        <router-link class="link" v-bind:to="routertest" >routertest</router-link>
       </li>
     </ul>
     <div class="wrap">
@@ -25,11 +28,18 @@
 
 export default {
   name: 'app',
+  data(){
+    return {
+      //定义routertest 组件的连接路径，给连接添加
+      routertest:"/routertest/"+ window.userId||"0000"
+    }
+  },
   computed:{
   },
   methods:{
     selectData(name){
-      //alert(name)
+      console.log(name);
+     // alert(window.userId);
     }
   },
   components: {
