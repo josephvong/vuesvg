@@ -14,6 +14,9 @@
       <li v-on:click="selectData('routertest')">
         <router-link class="link" v-bind:to="routertest" >routertest</router-link>
       </li>
+      <li v-on:click="selectData('render')">
+        <router-link class="link" to="/render" >render</router-link>
+      </li>
     </ul>
     <div class="wrap">
       <router-view>
@@ -38,7 +41,7 @@ export default {
   },
   methods:{
     selectData(name){
-      console.log(name);
+      //console.log(name);
      // alert(window.userId);
     }
   },

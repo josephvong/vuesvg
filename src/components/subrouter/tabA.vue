@@ -1,6 +1,6 @@
 <template>
   <div class="tabA">
-    tab A
+    tab A {{insideId}} <input type="text" />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
   name: 'tabA',
   data(){
     return {
-
+      insideId:this.$route.params.userid,
     }
   },
   computed:{

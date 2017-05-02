@@ -2,15 +2,23 @@
   <div class="testwrap">
     userId is : {{userid}}
     <div class="sub-link">
-      <div class="link" v-on:click="selecting"><router-link to="/tab_a">tab a</router-link></div>
-      <div class="link"><router-link class="link" to="/tab_b">tab b</router-link></div>
-
+      <div class="link" ><router-link :to="{name:'tab_a',params:{userid:this.userid}}">tab_a</router-link></div>
+      <div class="link" v-on:click="pushWithId">tab_b</div>
+      <div class="link" ><router-link to="/tab_c">tab_c</router-link></div>
+      <div class="link" v-on:click="go_back" >go_back</div>
+      <div class="link" >stop router</div>
+      <div class="link" >start router</div>
     </div>
     <div class="wrap">
+      <transition>
+        <router-view></router-view>
+      </transition>
+    </div>
+    <!-- <div class="wrap">
       <router-view >
 
       </router-view>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -27,16 +35,22 @@ export default {
   computed:{
 
   },
-  methods:{
-    selecting(){
-      //alert("A")
-      console.log(event.target.innerHTML);
-     // alert(window.userId);
-    }
+  methods:{ 
+    pushWithId(){  // 带上ID进行路由视区切换的方法 
+      let url=`/${event.target.innerHTML}/${this.userid}`; //routertest
+      router.push({"path":url,query:{"name":"joseph"}})
+    },
+    go_back(){  // 返回上一级方法
+       router.go(-1)
+    },
   },
-  mounted(){
-    router.push({"path":"/tab_a"})
-    //console.log(this.$route.params)
+  beforeRouteEnter (to, from, next) { // 进入 到 当前组件 时触发 
+    // 参数to 为 当前 组件的 url
+    console.log(from.path);
+    next()
+  },
+  mounted(){ 
+    router.push({"name":"tab_a",params:{userid:this.userid}})  
   }
 }
 </script>
@@ -57,7 +71,7 @@ export default {
       font-size:16px
   &>.wrap
     width:90%
-    height:300px
+    height:100px
     border:1px solid blue
     margin :20px auto
 </style>

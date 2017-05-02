@@ -43,7 +43,6 @@ export default {
   data(){
     let  defaultSides=10 // 默认边为10
     let stats = Array.apply(null,{length:defaultSides}).map(function(){return 100}) // 输出 10 个 “100” 的数组
-    console.log(stats);
     return {
       stats: stats, //边数量对应的数组
       points:generatePoints(stats), // 生成对应边数的多边形坐标点
@@ -102,8 +101,7 @@ export default {
       },this.updateInterval)
     }
   },
-  mounted(){
-   console.log(TweenLite); 
+  mounted(){ 
    this.resetInterval() // 渲染组件 执行 数组循环重设函数
   }
 }

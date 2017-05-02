@@ -121,7 +121,6 @@ export default {
     chartInit(obj){
       let vm=this;
       let num=0;
-      console.log(obj)
       function animate(time){
         requestAnimationFrame(animate)
         TWEEN.update(time)

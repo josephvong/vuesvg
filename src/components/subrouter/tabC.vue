@@ -1,6 +1,6 @@
 <template>
-  <div class="tabB">
-    tab B {{username}} with id : {{insideId}}
+  <div class="tabC">
+    tab C
   </div>
 </template>
 
@@ -8,11 +8,10 @@
 
 
 export default {
-  name: 'tabB',
+  name: 'tabC',
   data(){
     return {
-      insideId:this.$route.params.userid,
-      username:this.$route.query.name
+       
     }
   },
   computed:{
@@ -28,7 +27,7 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-.tabB
+.tabC
   width 100%
   height 100%
 </style>
