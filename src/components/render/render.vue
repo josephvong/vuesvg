@@ -1,6 +1,9 @@
 <template>
-  <smartItem :data="data"></smartItem>
-  <button></button>
+  <div>
+     <smartItem v-bind:nodeInfo="nodeInfo"></smartItem>
+
+  <!--<button></button> -->
+  </div>
 </template>
 
 <script>
@@ -10,12 +13,16 @@ import newHead from './newHead.js'
 import smartItem from './smartItem.js'
 export default {
   name: 'render',
-  props:{ 
-     
+  props:{
+
   },
   data(){
     return {
-      data:{}
+      nodeInfo:{
+        'type':"img",
+        //'text':'hello'
+        'url':"https://m.9kacha.com/activities_t/G100ChinaTour/thumb/01.jpg"
+      }
     }
   },
   computed:{
@@ -26,11 +33,11 @@ export default {
     newHead,
     smartItem
   },
-  methods:{ 
-     
+  methods:{
+
   },
-  mounted(){ 
-    
+  mounted(){
+    //console.log(this.nodeData)
   }
 }
 </script>
@@ -38,5 +45,5 @@ export default {
 <style lang="stylus" rel="stylesheet/stylus">
 .renderwrap
   width 100%
-  height 100% 
+  height 100%
 </style>

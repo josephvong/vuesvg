@@ -23,9 +23,9 @@ let router = new VueRouter({
 		{name:"circle",path:"/circle",component:circlewrap},
 		{path:'/chart',component:chartwrap},
 		{path:'/path',component:pathwrap,
-			beforeEnter:(to, from, next) => { 
+			beforeEnter:(to, from, next) => {
 				console.log(to.path);
-				next(); 
+				next();
 			}
 		},
 		{name:"render",path:"/render",component:render},
@@ -34,21 +34,21 @@ let router = new VueRouter({
 			{name:"tab_a",path:"/tab_a/:userid",component:tabA},  // 此路由路径 命名了 name：“tab_a” 同等于 “/tab_a”
 			{name:"tab_b",path:"/tab_b/:userid",component:tabB},//path:"/routertest/tab_b/:userid",
 		 	{name:"tab_c",path:"/tab_c",component:tabC,meta:{"requiresAuth":true}}
-		 ], 
+		 ],
 		},
-		
+
 	],
-	
+
 })
 
-router.beforeEach((to, from, next) => { 
-  console.log(to);
+router.beforeEach((to, from, next) => {
+  //console.log(to);
   /*if(to.matched.some(record=> record.meta.requiresAuth)){ // to.match
 
   	console.log(to.matched);
   }*/
   next();
 })
- 
+
 
 export default router
