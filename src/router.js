@@ -10,7 +10,7 @@ import tabB from "./components/subrouter/tabB.vue"
 import tabC from "./components/subrouter/tabC.vue"
 
 import render from './components/render/render'
-
+import renderTable from './components/renderTable/renderTable'
 
 Vue.use(VueRouter);
 
@@ -29,6 +29,7 @@ let router = new VueRouter({
 			}
 		},
 		{name:"render",path:"/render",component:render},
+		{name:"renderTable",path:"/renderTable",component:renderTable},
 		{path:'/routertest/:userid',component:routertest,
 		 children:[  //
 			{name:"tab_a",path:"/tab_a/:userid",component:tabA},  // 此路由路径 命名了 name：“tab_a” 同等于 “/tab_a”

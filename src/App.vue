@@ -17,6 +17,9 @@
       <li v-on:click="selectData('render')">
         <router-link class="link" to="/render" >render</router-link>
       </li>
+      <li v-on:click="selectData('renderTable')">
+        <router-link class="link" to="/renderTable" >renderTable</router-link>
+      </li>
     </ul>
     <div class="wrap">
       <router-view>
