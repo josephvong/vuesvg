@@ -10,7 +10,7 @@
       <div class="link" >start router</div>
     </div>
     <div class="wrap">
-      <transition>
+      <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
     </div>
